@@ -1,0 +1,8 @@
+INDEX VERSION 1.4+C:\Users\wwwde\OneDrive\Desktop\JFS-Projects\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+3689519981.index
+1901750245.index
+2735422579.index
+1807384993.index
+2095915869.index
+2517975134.index
+2317869974.index

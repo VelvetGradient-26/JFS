@@ -1,0 +1,62 @@
+package employee;
+
+import java.io.*;
+import java.sql.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.WebServlet;
+
+@WebServlet("/register")
+public class EmployeeServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        response.setContentType("text/html");
+        
+        // Extract data from Request
+        int id = Integer.parseInt(request.getParameter("id"));
+        String fn = request.getParameter("firstName");
+        String ln = request.getParameter("lastName");
+        String un = request.getParameter("username");
+        String pwd = request.getParameter("password");
+        String addr = request.getParameter("address");
+        String cont = request.getParameter("contact");
+
+        // Populate Model
+        Employee emp = new Employee();
+        emp.setId(id);
+        emp.setFirstName(fn);
+        emp.setLastName(ln);
+        emp.setUsername(un);
+        emp.setPassword(pwd);
+        emp.setAddress(addr);
+        emp.setContact(cont);
+
+        request.setAttribute("emp", emp);
+
+        // JDBC Logic
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/god", "root", "root")) {
+                String sql = "INSERT INTO employee1 (id, first_name, last_name, username, password, address, contact) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setInt(1, emp.getId());
+                ps.setString(2, emp.getFirstName());
+                ps.setString(3, emp.getLastName());
+                ps.setString(4, emp.getUsername());
+                ps.setString(5, emp.getPassword());
+                ps.setString(6, emp.getAddress());
+                ps.setString(7, emp.getContact());
+
+                ps.executeUpdate();
+            }
+            
+            RequestDispatcher rd = request.getRequestDispatcher("employeedetail.jsp");
+            rd.forward(request, response);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().print("Error: " + e.getMessage());
+        }
+    }
+}
